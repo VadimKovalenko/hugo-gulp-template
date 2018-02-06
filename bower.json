@@ -1,0 +1,22 @@
+{
+  "name": "hugo-test",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Vadim Kovalenko"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "static/libs/",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "4",
+    "jquery": "^3.3.1"
+  }
+}

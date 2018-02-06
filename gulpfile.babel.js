@@ -5,22 +5,12 @@ import shell from 'gulp-shell'
 import sass from 'gulp-sass'
 import cleanCSS from 'gulp-clean-css'
 import watch from 'gulp-watch'
-let uglify = require('gulp-uglify')
-let pump = require('pump')
+import concat from 'gulp-concat'
+import uglify from 'gulp-uglify'
+import pump from 'pump'
+import autoprefixer from 'gulp-autoprefixer'
 
 gulp.task('hugo-build', shell.task(['hugo']))
-
-gulp.task('minify-html', () => {
-  return gulp.src('public/**/*.html')
-    .pipe(htmlmin({
-      collapseWhitespace: true,
-      minifyCSS: true,
-      minifyJS: true,
-      removeComments: true,
-      useShortDoctype: true,
-    }))
-    .pipe(gulp.dest('./public'))
-})
 
 gulp.task('minify-css', () => {
   return gulp.src('public/css/*.css')
@@ -28,19 +18,20 @@ gulp.task('minify-css', () => {
     .pipe(gulp.dest('public/css/'));
 });
 
-gulp.task('compress', function (cb) {
-  pump([
-        gulp.src('public/js/*.js'),
-        uglify(),
-        gulp.dest('public/js/')
-    ],
-    cb
-  );
-});
+gulp.task('js', function() {
+  return gulp.src([
+    'public/libs/jquery/dist/jquery.min.js',
+    'public/js/main.js', // Always at the end
+  ])
+  .pipe(concat('main.min.js'))
+  .pipe(uglify()) // Mifify js (opt.)
+  .pipe(gulp.dest('public/js'))
+})
 
 gulp.task('sass', function () {
   return gulp.src('static/sass/*.sass')
     .pipe(sass().on('error', sass.logError))
+    .pipe(autoprefixer(['last 15 versions']))
     .pipe(gulp.dest('static/css/'))
     .pipe(gulp.dest('public/css/'));
 });
@@ -51,5 +42,5 @@ gulp.task('stream', function () {
 });
 
 gulp.task('build', ['hugo-build'], (callback) => {
-  runSequence('minify-html', 'sass', 'minify-css', 'compress', callback)
+  runSequence('sass', 'js', 'minify-css', callback)
 })
