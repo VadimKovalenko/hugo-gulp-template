@@ -28,7 +28,7 @@ npm run watch
 ### Additional info/TODOs:
 For now minifying working only for ES5 syntax
 
-### UPD 6 FEB 2017
+### UPD 6 FEB 2018
 Added jQuery and Bootstrap4 via (and with) the Bower package manager
 
 ### Reference:
